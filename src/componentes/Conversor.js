@@ -29,11 +29,10 @@ export default class Conversor extends Component {
             })
             .then(json => {
                 console.log('return', json)
+                this.setState(json);
                 
                 let statusCode = json.statusCode;
-                if (statusCode == 200) {
-                    this.setState(json);
-                } else {
+                if (statusCode !== 200) {
                     alert("Error ao chamar API: " + json.message)
                 }
             });
