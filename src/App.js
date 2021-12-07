@@ -6,7 +6,7 @@ function App() {
     <div className="App">
       <h1>Calculadora Pitágoras</h1>
       <div className="linha">
-        <Conversor moedaA="USD" moedaB="BRL"></Conversor>
+        <Conversor></Conversor>
       </div>
     </div>
   );
