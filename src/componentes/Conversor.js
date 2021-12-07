@@ -15,7 +15,11 @@ export default class Conversor extends Component {
 
         this.calcular_hipotenusa = this.calcular_hipotenusa.bind(this);
      }
-
+     print_state(){
+        console.log(this.state.hipotenusa)
+        console.log(this.state.cateto_menor)
+        console.log(this.state.cateto_maior)
+     }
      calcular_hipotenusa(){
         let lado1 = this.state.lado1;
         let lado2 = this.state.lado2;
@@ -29,12 +33,13 @@ export default class Conversor extends Component {
             })
             .then(json => {
                 console.log('return', json)
-                this.setState(json);
+                this.setState(json, this.print_state);
                 
                 let statusCode = json.statusCode;
                 if (statusCode !== 200) {
                     alert("Error ao chamar API: " + json.message)
                 }
+
             });
     }
 
