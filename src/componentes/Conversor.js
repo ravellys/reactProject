@@ -7,7 +7,10 @@ export default class Conversor extends Component {
         this.state = {
             lado1: "",
             lado2: "",
-            hipotenusa: ""
+            hipotenusa: "",
+            method: "calcular_hipotenusa",
+            cateto_menor:"",
+            cateto_maior:"",
         }
 
         this.calcular_hipotenusa = this.calcular_hipotenusa.bind(this);
@@ -16,7 +19,8 @@ export default class Conversor extends Component {
      calcular_hipotenusa(){
         let lado1 = this.state.lado1;
         let lado2 = this.state.lado2;
-        let url = `https://flaskprojectravellys.herokuapp.com/calcular_hipotenusa/${lado1}/${lado2}`;
+        let method = this.state.method
+        let url = `https://flaskprojectravellys.herokuapp.com/${method}/${lado1}/${lado2}`;
         console.log(url)
 
         fetch(url)
@@ -25,8 +29,13 @@ export default class Conversor extends Component {
             })
             .then(json => {
                 console.log('return', json)
-                let hipotenusa = parseFloat(json['hipotenusa']);
-                this.setState({hipotenusa})
+                
+                let statusCode = json.statusCode;
+                if (statusCode == 200) {
+                    this.setState(json);
+                } else {
+                    alert("Error ao chamar API: " + json.message)
+                }
             });
     }
 
@@ -34,12 +43,25 @@ export default class Conversor extends Component {
     render() {
         return (
             <div className="conversor">
-
-                <input className="lado1" onChange={(event) => { this.setState({lado1:event.target.value})}} type="text"></input>
-                <input className="lado2" onChange={(event) => { this.setState({lado2:event.target.value})}} type="text"></input>
+                
+                <h2> Lado 1: 
+                    <input className="lado1" onChange={(event) => { this.setState({lado1:event.target.value})}} type="text"></input>
+                </h2>
+                <h2> Lado 2: 
+                    <input className="lado2" onChange={(event) => { this.setState({lado2:event.target.value})}} type="text"></input>
+                </h2>
+                <h2> Metódo:
+                    <select name="select" onChange={(event) => this.setState({method:event.target.value})} value={this.state.valeu}>
+                        <option value="calcular_hipotenusa" selected>Calcular Hipotenusa</option>
+                        <option value="calcular_cateto" >Calcular Cateto</option>
+                    </select>
+                </h2>
                 <input className="button" type="button" value="Converter" onClick={this.calcular_hipotenusa}></input>
                 
+
                 <h2>Hipotenusa: <span> {this.state.hipotenusa} </span></h2>
+                <h2>Cateto Menor: <span> {this.state.cateto_menor} </span></h2>
+                <h2>Cateto Maior: <span> {this.state.cateto_maior} </span></h2>
 
             </div>
         )
